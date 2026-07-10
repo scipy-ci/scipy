@@ -42,11 +42,10 @@ jobs:
     - uses: prefix-dev/setup-pixi@ba3bb36eb2066252b2363392b7739741bb777659 # v0.8.1
       with:
         pixi-version: v0.72.1
-        cache: true
         environments: asan
 
     - name: Build SciPy against CPython & NumPy with ASAN
-      run: pixi run build-asan
+      run: pixi run build-asan -j4
 
     - name: Test
-      run: pixi run --skip-deps test-asan -v -- --timeout=600 --durations=10
+      run: pixi run --skip-deps test-asan -v -j4 -- --timeout=600 --durations=10
