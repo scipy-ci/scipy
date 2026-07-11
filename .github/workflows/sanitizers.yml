@@ -45,7 +45,7 @@ jobs:
         environments: asan
 
     - name: Build SciPy against CPython & NumPy with ASAN
-      run: pixi run build-asan -j4
+      run: pixi run build-asan -j2
 
     - name: Test
-      run: pixi run --skip-deps test-asan -v -j4 -- --timeout=600 --durations=10
+      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -v -j2 -- --timeout=600 --durations=50
