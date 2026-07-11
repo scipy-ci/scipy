@@ -857,7 +857,7 @@ description = "Test SciPy with system libs"
 
 
 [feature.asan]
-platforms = ["osx-arm64", "linux-64"]
+platforms = ["osx-arm64", "linux-64", "linux-aarch64"]
 # makes some packages solvable with dev Python
 channels = ["https://prefix.dev/sp-nightly-forge"]
 
