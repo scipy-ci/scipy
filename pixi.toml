@@ -892,6 +892,9 @@ blas-devel = { version = "*", build = "*openblas" }
 [feature.asan-build-deps.target.linux-64.dependencies]
 clangxx_linux-64 = "*"
 
+[feature.asan-build-deps.target.linux-aarch64.dependencies]
+clangxx_linux-aarch64 = "*"
+
 [feature.asan-build-deps.target.osx-arm64.dependencies]
 clangxx_osx-arm64 = "*"
 
@@ -908,7 +911,7 @@ env.ASAN_OPTIONS = "detect_leaks=0:symbolize=1:strict_init_order=true:allocator_
 description = "Test SciPy with address sanitizer"
 
 [feature.asan.target.osx-arm64.tasks.test-asan]
-cmd = "echo $ASAN_OPTIONS && spin test --no-build --build-dir=build-asan --no-capture -m 'not fail_asan'"
+cmd = "spin test --no-build --build-dir=build-asan --no-capture -m 'not fail_asan'"
 depends-on = "build-asan"
 # include `quarantine_size_mb=64` to avoid hang with large memory usage
 env.ASAN_OPTIONS = "quarantine_size_mb=64:detect_leaks=0:symbolize=1:strict_init_order=true:allocator_may_return_null=1:use_sigaltstack=0:$ASAN_OPTIONS"
