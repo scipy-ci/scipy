@@ -15,7 +15,7 @@ permissions:
 
 env:
   CCACHE_DIR: "${{ github.workspace }}/.ccache"
-  CCACHE_MAXSIZE: "750M"
+  CCACHE_MAXSIZE: "500M"
   # Needed because Pixi doesn't set mtime for compilers
   CCACHE_COMPILERCHECK: "content"
   PIXI_CACHE_DIR: "${{ github.workspace }}/.cache/rattler"
@@ -35,7 +35,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [blacksmith-4vcpu-ubuntu-2404]
+        runs-on: [blacksmith-8vcpu-ubuntu-2404]
     needs: get_commit_message
     if: >
       needs.get_commit_message.outputs.message == 1
@@ -67,7 +67,7 @@ jobs:
         job_name: ${{ github.job }}-${{ matrix.runs-on }}
 
     - name: Build SciPy against CPython & NumPy with ASAN
-      run: pixi run build-asan -j4
+      run: pixi run build-asan -j8
 
     - name: Ccache performance
       run: |
@@ -75,4 +75,4 @@ jobs:
         pixi exec ccache -s
 
     - name: Test
-      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j3 -- --timeout=600 --durations=50
+      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j4 -- --timeout=600 --durations=50
