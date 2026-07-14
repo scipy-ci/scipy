@@ -35,6 +35,7 @@ concurrency:
 jobs:
   get_commit_message:
     name: Get commit message
+    if: github.repository == 'scipy/scipy' || github.repository == ''
     uses: ./.github/workflows/commit_message.yml
 
   xp_cpu:
