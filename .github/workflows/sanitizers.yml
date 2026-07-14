@@ -75,4 +75,4 @@ jobs:
         pixi exec ccache -s
 
     - name: Test
-      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j4 -- --timeout=600 --durations=50
+      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j3 -- --timeout=600 --durations=50
