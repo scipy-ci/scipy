@@ -15,7 +15,7 @@ permissions:
 
 env:
   CCACHE_DIR: "${{ github.workspace }}/.ccache"
-  CCACHE_MAXSIZE: "500M"
+  CCACHE_MAXSIZE: "750M"
   # Needed because Pixi doesn't set mtime for compilers
   CCACHE_COMPILERCHECK: "content"
   PIXI_CACHE_DIR: "${{ github.workspace }}/.cache/rattler"

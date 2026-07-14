@@ -901,6 +901,8 @@ clangxx_osx-arm64 = "*"
 [feature.asan.tasks.build-asan]
 # TODO: investigate why `use-pythran=false` is needed
 cmd = "spin build --asan --build-dir=build-asan --setup-args=-Duse-pythran=false --setup-args=-Dblas=blas --setup-args=-Dlapack=lapack --setup-args=-Duse-g77-abi=true"
+env.CC = "ccache $CC"
+env.CXX = "ccache $CXX"
 env.ASAN_OPTIONS = "detect_leaks=0:strict_init_order=true:use_sigaltstack=0"
 description = "Build SciPy, NumPy, and CPython with address sanitizer"
 
