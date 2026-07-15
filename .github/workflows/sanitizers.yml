@@ -30,12 +30,13 @@ jobs:
     uses: ./.github/workflows/commit_message.yml
 
   test_ASAN:
-    name: Test under AddressSanitizer
+    name: Test under AddressSanitizer (shard ${{ matrix.shard }})
     runs-on: ${{ matrix.runs-on }}
     strategy:
       fail-fast: false
       matrix:
-        runs-on: [blacksmith-8vcpu-ubuntu-2404]
+        runs-on: [blacksmith-4vcpu-ubuntu-2404]
+        shard: [0, 1]
     needs: get_commit_message
     if: >
       needs.get_commit_message.outputs.message == 1
@@ -70,7 +71,7 @@ jobs:
         job_name: ${{ github.job }}-${{ runner.arch }}
 
     - name: Build SciPy against CPython & NumPy with ASAN
-      run: pixi run build-asan -j8
+      run: pixi run build-asan -j4
 
     - name: Ccache performance
       run: |
@@ -78,4 +79,7 @@ jobs:
         pixi exec ccache -s
 
     - name: Test
-      run: ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j2 -- --timeout=600 --durations=50
+      run: >-
+        ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j2 --
+        --timeout=600 --durations=25
+        --shard-id=${{ matrix.shard }} --num-shards=2

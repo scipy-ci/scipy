@@ -863,6 +863,8 @@ channels = ["https://prefix.dev/sp-nightly-forge"]
 
 [feature.asan.dependencies]
 spin = "*"
+# used to split the test suite across CI jobs in sanitizers.yml
+pytest-shard = "*"
 
 python.flags = ["asan"]
 python.git = "https://github.com/lucascolley/cpython"
