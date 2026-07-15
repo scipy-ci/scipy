@@ -70,6 +70,13 @@ jobs:
         workflow_name: ${{ github.workflow }}
         job_name: ${{ github.job }}-${{ runner.arch }}
 
+    - name: CPU diagnostics
+      # the Blacksmith runner fleet is heterogeneous, and crashes have been
+      # observed in numpy's AVX512 exp/log kernels on AVX512-capable hosts
+      run: |
+        grep -o 'avx512[a-z0-9_]*' /proc/cpuinfo | sort -u || echo "no AVX512 on this runner"
+        ASAN_OPTIONS=detect_leaks=0 pixi run -e asan python -c "import numpy as np; np.show_runtime()"
+
     - name: Build SciPy against CPython & NumPy with ASAN
       run: pixi run build-asan -j4
 
@@ -79,6 +86,15 @@ jobs:
         pixi exec ccache -s
 
     - name: Test
+      env:
+        # Workaround for segfaults in numpy's AVX512 float32 exp/log SIMD
+        # kernels (simd_exp_FLOAT/simd_log_FLOAT masked tail loads) under the
+        # ASan-instrumented build. numpy nightly dispatches by x86-64
+        # microarchitecture level; X86_V4 is the AVX512 baseline, keep X86_V3
+        # (AVX2) enabled. Unknown names raise an ImportWarning, which scipy's
+        # pytest config escalates to an error, so only set this on x86-64.
+        # TODO: remove once understood/fixed upstream in numpy.
+        NPY_DISABLE_CPU_FEATURES: ${{ runner.arch == 'X64' && 'X86_V4 AVX512_ICL AVX512_SPR' || '' }}
       run: >-
         ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j2 --
         --timeout=600 --durations=25
