@@ -870,6 +870,7 @@ python.flags = ["asan"]
 python.git = "https://github.com/lucascolley/cpython"
 python.subdirectory = "Tools/pixi-packages"
 python.rev = "8b5b0c29797cf88d78ef014916a5e5a5d51bbf95"
+#"de788e8fd4d17c2db6e0db27666ac2b7d8981e97"
 
 numpy.flags = ["asan"]
 numpy.git = "https://github.com/numpy/numpy"
