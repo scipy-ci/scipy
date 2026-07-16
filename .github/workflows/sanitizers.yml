@@ -96,6 +96,6 @@ jobs:
         # TODO: remove once understood/fixed upstream in numpy.
         NPY_DISABLE_CPU_FEATURES: ${{ runner.arch == 'X64' && 'X86_V4 AVX512_ICL AVX512_SPR' || '' }}
       run: >-
-        ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j4 --
+        ASAN_OPTIONS=malloc_context_size=7 pixi run --skip-deps test-asan -j6 --
         --timeout=600 --durations=25
         # --shard-id=${{ matrix.shard }} --num-shards=2
